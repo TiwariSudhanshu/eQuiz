@@ -40,7 +40,7 @@ export const loginUser = async(req,res)=>{
     throw new ApiError(400,  "email is required");
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: email });
 
   if (!user) {
     throw new ApiError(400, "User not found");
@@ -51,6 +51,7 @@ export const loginUser = async(req,res)=>{
   if (!isPasswordValid) {
     throw new ApiError(401, "Password is incorrect");
   }
+
 
   const loggedInUser = await User.findById(user._id).select(
     "-password" )
@@ -64,6 +65,31 @@ export const loginUser = async(req,res)=>{
         200,
         {loggedInUser},
         "User logged in successfully"
+      )
+    );
+}
+
+export const setScore = async(req,res)=>{
+  const {email,score} = req.body;
+  console.log(email)
+  console.log(score)
+  
+
+  const currentUser = await User.findOne({ email: email });
+
+  if (!currentUser) {
+    throw new ApiError(400, "User not found");
+  }
+
+  currentUser.score = score;
+  await currentUser.save();
+
+return res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        "User score set properly"
       )
     );
 }
