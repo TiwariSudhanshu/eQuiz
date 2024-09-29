@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import {ApiResponse} from "../utils/ApiResponse.js"
+import ExcelJS from "exceljs";
 
 
 export const registerUser = async(req,res)=>{
@@ -71,9 +72,6 @@ export const loginUser = async(req,res)=>{
 
 export const setScore = async(req,res)=>{
   const {email,score} = req.body;
-  console.log(email)
-  console.log(score)
-  
 
   const currentUser = await User.findOne({ email: email });
 
@@ -93,3 +91,37 @@ return res
       )
     );
 }
+
+export const exportData = async(req, res) => {
+  try {
+      const users = await User.find().select("-password"); 
+
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Users");
+
+      worksheet.columns = [
+          { header: "Name", key: "name", width: 30 },
+          { header: "Email", key: "email", width: 30 },
+          { header: "Score", key: "score", width: 15 },
+      ];
+
+      users.forEach((user) => {
+          worksheet.addRow({
+              name: user.name,
+              email: user.email,
+              score: user.score || 0,
+          });
+      });
+
+      res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      res.setHeader("Content-Disposition", `attachment; filename=users.xlsx`);
+
+      await workbook.xlsx.write(res);
+      res.end();
+  } catch (error) {
+      throw new ApiError(500, "Error exporting data: " + error.message);
+  }
+};
+
+
+  

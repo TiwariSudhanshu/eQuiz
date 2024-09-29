@@ -73,6 +73,12 @@
     margin-left: 450px;
     color: antiquewhite;
 }
+#downloadbtn{
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 5px;
+    margin-top: 1vmax;
+}
 .cdn{
     height:50px;
     width: 50px;
