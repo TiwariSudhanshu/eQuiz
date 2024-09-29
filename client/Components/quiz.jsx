@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './Quiz.css';
+import '.quiz.css';
 import { data } from '../data';
 import { toast } from 'react-toastify';
 
