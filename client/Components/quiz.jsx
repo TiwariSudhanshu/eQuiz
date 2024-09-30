@@ -7,7 +7,6 @@ import { useLocation } from 'react-router-dom';
 const Quiz = () => {
   const location = useLocation();
   let { email } = location.state || {};
-  console.log(email);
   let [index, setIndex] = useState(0);
   let [question, setQuestion] = useState(data[index]);
   let [isLocked, setIsLocked] = useState(false);
@@ -70,7 +69,7 @@ const Quiz = () => {
 
   const saveScore = async () => {
     try {
-      const response = await fetch("http://localhost:7000/api/v1/user/setScore", {
+      const response = await fetch("/api/v1/user/setScore", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

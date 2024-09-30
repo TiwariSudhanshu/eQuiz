@@ -30,7 +30,7 @@ function Signup() {
     if(password === confirmpassword){
       try {
         const response = await fetch(
-          "http://localhost:7000/api/v1/user/register",
+          "/api/v1/user/register",
           {
             method: "POST",
             headers:{
